@@ -13,6 +13,10 @@ Your task is to analyze the provided PCAP file to uncover how the file appeared 
 
 ## Tools Used
 - wireshark
+  ![wireshark](screenshots/1.jpeg)
+
+
+
 - iplocation.net
 ---
 
@@ -40,9 +44,15 @@ Your task is to analyze the provided PCAP file to uncover how the file appeared 
 ### Q3 — We need to determine if any vulnerabilities were exploited. What is the name of the malicious web shell that was successfully uploaded?
 
 **What I did:** Si l'attaquant a réussi à accéder à la machine, il a probablement utilisé un upload malveillant via une méthode POST pour déposer un web shell. J'ai donc filtré le trafic avec **http.request.method == "POST"** pour isoler ces requêtes.
- 
+  ![wireshark](screenshots/2.jpeg)
+
+
+  
 **What I found:** Parmi les requêtes POST, deux provenaient de l'attaquant et une de la victime, ce qui suggère un upload réussi suivi d'une communication sortante. Les paquets étaient fragmentés en raison de la segmentation TCP. J'ai utilisé **Follow TCP Stream** pour reconstituer l'échange complet. Le contenu révèle un script PHP de type reverse shell, placé dans un fichier nommé **image.jpg.php** avec une double extension pour tromper les utilisateurs Windows, qui masquent par défaut les extensions de fichiers. La troisième requête confirme le succès de l'upload.
 **Answer:** image.jpg.php
+ ![wireshark](screenshots/3.jpeg)
+
+
 
 ---
 
@@ -51,6 +61,13 @@ Your task is to analyze the provided PCAP file to uncover how the file appeared 
 **What I did:** Une fois le fichier uploadé, l'attaquant doit l'exécuter via une requête GET. J'ai utilisé le filtre Wireshark suivant pour localiser cette requête : **http.request.method == "GET" && http.request.uri contains "image.jpg.php".
 **What I found:** La requête correspondante est apparue, révélant le chemin complet du répertoire où le fichier malveillant a été stocké.
 **Answer:** /reviews/uploads/
+ ![wireshark](screenshots/4.jpeg)
+
+
+ 
+ ![wireshark](screenshots/5.jpeg)
+
+
 
 ---
 
@@ -67,6 +84,10 @@ Your task is to analyze the provided PCAP file to uncover how the file appeared 
 **What I did:** Pour identifier le fichier ciblé par l'attaquant, j'ai filtré les requêtes HTTP dont la source est l'adresse IP de la victime, ce qui correspond au trafic généré par le web shell exécuté côté serveur.
 **What I found:** Le filtrage a mis en évidence une requête HTTP contenant le fichier que l'attaquant tentait d'exfiltrer.
 **Answer:** /etc/passwd
+
+![wireshark](screenshots/6.jpeg)
+
+
 
 
 ## Incident Timeline
