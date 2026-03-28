@@ -4,6 +4,7 @@ Threat Intel
 
 ## Scenario
 The accountant at the company received an email titled "Urgent New Order" from a client late in the afternoon. When he attempted to access the attached invoice, he discovered it contained false order information. Subsequently, the SIEM solution generated an alert regarding downloading a potentially malicious file. Upon initial investigation, it was found that the PPT file might be responsible for this download. Could you please conduct a detailed examination of this file?
+
 ![hash](screenshots/1.jpeg)
 
 
@@ -15,19 +16,20 @@ The accountant at the company received an email titled "Urgent New Order" from a
 
 ### Q1 — Determining the creation time of the malware can provide insights into its origin. What was the time of malware creation?
 **What I did:**j'ai visité le site <virustotal> en mettant le hash donné,pour trouver des informations sur le hash je me suis dirigé vers details tab .
-![hash](screenshots/2.jpeg)
+![virustotal](screenshots/2.jpeg)
 
 
 
 **What I found:**dans detail tab j'ai trouvé la section History qui contenait la date de création.
 **Answer:**2022-09-28 17:40
-![hash](screenshots/3.jpeg)
+![creation](screenshots/3.jpeg)
 
 
 ### Q2 — Identifying the command and control (C2) server that the malware communicates with can help trace back to the attacker. Which C2 server does the malware in the PPT file communicate with?
 **What I did:**la communication C2 étant un comportement réseau, j'ai consulté le tab Behavior.
 **What I found:**dans ce tab, j'ai identifié le serveur avec lequel le malware communiquait.
-![hash](screenshots/5.jpeg)
+
+![post](screenshots/5.jpeg)
 
 
 **Answer:**POST http://171.22.28.221/5c06c05b7b34e8e6.php
@@ -36,7 +38,7 @@ NOTE: le malware se trouve dans la machine locale pour un reverse shell la méth
 ### Q3 — Identifying the initial actions of the malware post-infection can provide insights into its primary objectives. What is the first library that the malware requests post-infection?
 **What I did:**pour trouver cette information je suis resté dans le même tab, car le téléchargement de fichiers sur la machine constitue également un comportement du malware
 **What I found:**dans ce tab, plus précisément dans la section Files Dropped, on trouve le fichier téléchargé
-![hash](screenshots/6.jpeg)
+![file](screenshots/6.jpeg)
 
 
 **Answer:**sqlite3.dll
@@ -44,7 +46,7 @@ NOTE: le malware se trouve dans la machine locale pour un reverse shell la méth
 ### Q4 — By examining the provided Any.run report, what RC4 key is used by the malware to decrypt its base64-encoded string?
 **What I did:**le lien proposé par cyberdefender me redirige vers le report fait sur any.run
 **What I found:**dans la section stealc j'ai trouvé la clé .
-![hash](screenshots/7.jpeg)
+![key](screenshots/7.jpeg)
 
 
 **Answer:**5329514621441247975720749009
@@ -52,7 +54,7 @@ NOTE: le malware se trouve dans la machine locale pour un reverse shell la méth
 ### Q5 — By examining the MITRE ATT&CK techniques displayed in the Any.run sandbox report, identify the main MITRE technique (not sub-techniques) the malware uses to steal the user’s password.
 **What I did:**le lien me redirige vers la page d'accueil du report .pour voir les techniques MITRE ATT&CK j'accède au MITRE ATT&CK Matrix en cliquant sur le bouton ATT&CK sous les indicators et trackers
 **What I found:**j'ai trouvé toutes les techniques utilisées lors de cette attaque, l'une d'elles était "Credentials from Password Stores".
-![hash](screenshots/8.jpeg)
+![technique](screenshots/8.jpeg)
 
 
 
@@ -61,7 +63,8 @@ NOTE: le malware se trouve dans la machine locale pour un reverse shell la méth
 ### Q6 — By examining the child processes displayed in the Any.run sandbox report, which directory does the malware target for the deletion of all DLL files?
 **What I did:**dans la page d'accueil j'ai trouvé une petite arbre de processus.la commande responsable de la suppression des traces du malware était exécutée par cmd.exe le processus fils du VPN.exe
 **What I found:**j'ai trouvé une commande exécutée par cmd.exe qui ciblait suppression d'un répertoire spécifique.
-![hash](screenshots/9.jpeg)
+
+![cmd](screenshots/9.jpeg)
 
 
 
@@ -70,7 +73,7 @@ NOTE: le malware se trouve dans la machine locale pour un reverse shell la méth
 ### Q7 — Understanding the malware's behavior post-data exfiltration can give insights into its evasion techniques. By analyzing the child processes, after successfully exfiltrating the user's data, how many seconds does it take for the malware to self-delete?
 **What I did:**pour déterminer le délai avant la suppression du malware j'ai poursuivi l'arbre de processus en cliquant sur le processus timeout, puis sur more info.
 **What I found:**j'ai trouvé une représentation du timeline de ce dernier.
-![hash](screenshots/10.jpeg)
+![timeline](screenshots/10.jpeg)
 
 
 **Answer:** 5
