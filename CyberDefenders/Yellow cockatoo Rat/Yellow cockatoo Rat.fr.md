@@ -82,7 +82,7 @@ During a regular IT security check at GlobalTech Industries, abnormal network tr
 **Answer:**https://gogohid.com
  
 
-![history](screenshots/.jpeg)
+![history](screenshots/6.jpeg)
 
 
 ## Incident Timeline
