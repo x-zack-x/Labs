@@ -30,7 +30,7 @@ During a regular IT security check at GlobalTech Industries, abnormal network tr
 ### Q2 — As part of our incident response, knowing common filenames the malware uses can help scan other workstations for potential infection. What is the common filename associated with the malware discovered on our workstations?
 
 
-**What I did:**il importe de souligner que la connaissance du nom de fichier malware pourra exubéré la recherche de ce dernier dans différentes stations.j'ai utilisé le hash de sorte que je trouve plus d'information concernant le nom du fichier.
+**What I did:**il importe de souligner que la connaissance du nom de fichier malware pourra facilité la recherche de ce dernier dans différentes stations.j'ai utilisé le hash de sorte que je trouve plus d'information concernant le nom du fichier.
 
 **What I found:**dans details tab ,plus spécifiquement names section plusieurs noms que ce malaware l'utilise lors des attaques mais j'ai choisi le premier plus qu'il est le plus commun.
 
