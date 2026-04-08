@@ -95,8 +95,8 @@ During a regular IT security check at GlobalTech Industries, abnormal network tr
 
 ## What I Learned
 
--j'ai appris que les extensions ont différents rôles par exemples .dat est un fichier de données utilisé par les malwares pour éviter les détections.
+- j'ai appris que les extensions ont différents rôles par exemples .dat est un fichier de données utilisé par les malwares pour éviter les détections.
 
 - les fichiers .dll sont des bibliothèques contenant differents fonctions ou codes pour effectuer des tâches spécifiques en utilisant un processus,généralement utilisé pour éviter la détection (en tout cas le AV le considère suspect mais ne le priorise pas).
   
--la combinaison de ces fichiers sert spécifique pour la persistence mais c'est les registry key sont la plus importantes tâches dans cette chaîne du fait que ce dernier sert à executer des commandes ou processus lors du démarrage du l'ordinateur.
+- la combinaison de ces fichiers sert spécifique pour la persistence mais c'est les registry key sont la plus importantes tâches dans cette chaîne du fait que ce dernier sert à executer des commandes ou processus lors du démarrage du l'ordinateur.
