@@ -88,9 +88,13 @@ During a regular IT security check at GlobalTech Industries, abnormal network tr
 ## Incident Timeline
 
   t=2020-09-24 18:26:47 UTC |le temps de compilation par le développeur du malware(risque du timestomping);
+  
   t=2020-10-15 02:47:37 UTC |la première fois ce fichier a été téléchargé sur VT(virustotal);
+  
   t=2021-01-18 20:15:04 UTC |la première fois où le malware a été détecté sur une machine;
+  
   t=2025-07-05 19:05:08 UTC |la dernière fois ce fichier est sousmis sur virustotal;
+  
   t=2026-04-02 05:17:15 UTC | la dernière fois le malware a été analysé sur un fichier par virustotal;
 
 ## What I Learned
