@@ -17,7 +17,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
 
 
 **What I did:Après mon accès aux rapports générés par ALEAPP,j'ai commencé par naviguer entre les sections du rapport de sorte que j'ai acquis une compréhension approfondie sur sa structure.dès-lors, j'ai trouvé la section des applications.
+
 **What I found:**la section "Installed APPS" contenait trois sous section dont l'un d'elles avait un tableau des application installées par google play store (gms).
+
 **Answer:**4f168a772350f283a1c49e78c1548d7c2c6c05106d8b9feb825fdc3466e9df3c.
 
 ![hashvalue](screenshots/2.jpeg)
@@ -27,7 +29,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
  
 
 **What I did:**le rapport avait deux sous-sections pour les messages venant d'app de communication.j'ai commencé par la recherche dans la sous-section "Discord Chats" ,ensuite je me suis engagé  avec la deuxième sous section "Sms messsages".
+
 **What I found:**ce dernier contentait un seule message qui parlait du prêt.
+
 **Answer:**250 000 (EGP).
 
 ![ransom](screenshots/3.jpeg)
@@ -40,7 +44,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
 
 
 **What I did:**il convient de noter que les témoignages soulignent que le prêteur a appelé plusieurs fois.dès-lors, j'ai vérifié la section "Call Logs" pour voir le numéro du prêteur de ce fait j'ai remarqué  le numéro qui se répète plusieurs fois sans aucune réponse "+20 11 72 13 72 58".
+
 **What I found:**j'ai utilisé le numéro trouvé afin de filtrer les contacts de la victime.
+
 **Answer:**Shady Wahab.
 
 ![name](screenshots/5.jpeg)
@@ -50,7 +56,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
 ### Q4 — Based on the statement from the victim's family, they said that on September 20, 2023, he departed from his residence without informing anyone of his destination. Where was the victim located at that moment?
 
 **What I did:**Pour tracer l'activité de la victime j'ai utilisé la section "Recent Activity".
+
 **What I found:**j'ai trouvé un tableau qui contenait la même date demandée avec un screenshot de google maps .
+
 **Answer:**The Nile Ritz-Carlton.
 
 ![map](screenshots/6.jpeg)
@@ -60,7 +68,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
 ### Q5 — The detective continued his investigation by questioning the hotel lobby. She informed him that the victim had reserved the room for 10 days and had a flight scheduled thereafter. The investigator believes that the victim may have stored his ticket information on his phone. Look for where the victim intended to travel.
 
 **What I did:**j'ai commencé par l'inspection de sous section "recent activity" qui contenait pas les activités faites à la date designée. par ailleurs ,j'ai trouvé une photo numérique d'un billet d'avion dont le départ est egypt à cairo ce qui implique la ville où  se trouvait la victime. 
+
 **What I found:**ce billet contenait la destination recherchée avec la date qui renforce totalement le témoignage du lobby (1.10.2023).
+
 **Answer:**Las Vegas.
 
 ![map](screenshots/7.jpeg)
@@ -70,7 +80,9 @@ We're currently in the midst of a murder investigation, and we've obtained the v
 ### Q6 — After examining the victim's Discord conversations, we discovered he had arranged to meet a friend at a specific location. Can you determine where this meeting was supposed to occur?
 
 **What I did:**j'ai accédé à la sous-section "discord Chats" pour chercher le message convenable.
+
 **What I found:**j'ai trouvé un message de "rob1ns0n" à "20.09.2023" qui contenait le lieu du rendez-vous.
+
 **Answer:**The Mob Museum.
 
 ![museum](screenshots/8.jpeg)
