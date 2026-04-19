@@ -100,7 +100,9 @@ Network Forensics
  - j'ai appris que le protocol smb est un protocol de transmission des données sur un réseau local .par ailleurs, afin d'assurer la sécurité lors de l'utilisation de ce protocol il faut utiliser un protocol d'authentification comme ntlm sans compter la configuration du pare-feu pour assurer aucune appareil externe aura accès à ce protocol .
  
  - au niveau de l'attaqueur il est utile d'utiliser la première réponse du ntlm pour la collection des hostnames.
- - restricter l'accès aux autres machines en utilisant smb sera outil en matière du moindre privilèges de sorte que le pivotage d'un attaquant sur un réseau soit limité
- - dans les networks shares ADMIN$ est très utilisé pour la transmission des fichiers binaire (.exe) en revanche l'arbre IPC$ est utilisé pour le contrôle à distance
+ 
+ - restricter l'accès aux autres machines en utilisant smb sera outil en matière du moindre privilèges de sorte que le pivotage d'un attaquant sur un réseau soit limité.
+ 
+ - dans les networks shares ADMIN$ est très utilisé pour la transmission des fichiers binaire (.exe) en revanche l'arbre IPC$ est utilisé pour le contrôle à distance.
 
  
