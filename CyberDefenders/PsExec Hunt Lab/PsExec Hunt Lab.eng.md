@@ -19,7 +19,9 @@ Network Forensics
 
 
 **What I did:** I selected the .pcap file in Wireshark for precise analysis. Furthermore, I accessed the conversations section where all traffic activities are summarized by IP, MAC, and size.
+
 **What I found:** I found two communications containing the largest sizes. They shared a common IP; therefore, to verify if this IP belonged to the attacker, I used a filter **ip.addr eq [IP]** to check if this IP was responsible for the first TCP SYN packet in the conversation.
+
 **Answer:** 10.0.0.130
 ![pcap](screenshots/3.jpeg)
 
@@ -29,13 +31,17 @@ Network Forensics
 ![pcap](screenshots/4.jpeg)
 
 **What I did:** It should be noted that we have the attacker's IP, which is an internal IP. Consequently, I used this indicator in the traffic filtering.
+
 **What I found:** The filtered traffic contained several packets highlighting a connection attempt using the SMB protocol. One of these packets contained some identification information.
+
 **Answer:** Sales-PC
 
 ### Q3 — Knowing the username of the account the attacker used for authentication will give us insights into the extent of the breach. What is the username utilized by the attacker for authentication?
 
 **What I did:** Using the info section and source IP section in Wireshark, I was able to determine which packet contained the identification information used by the attacker.
+
 **What I found:** By examining the packet, specifically the **smb2 header** section, I found the hostname as well as the authentication identifier.
+
 **Answer:** ssales
 
 ### Q4 — After figuring out how the attacker moved within our network, we need to know what they did on the target machine. What's the name of the service executable the attacker set up on the target?
@@ -43,13 +49,17 @@ Network Forensics
 ![pcap](screenshots/5.jpeg)
 
 **What I did:** To track the attacker's activities, I filtered the traffic using the IP of the machine pivoted by the attacker.
+
 **What I found:** From the info section, while examining the smb2 section in the packet, I found the name of the created executable file.
+
 **Answer:** psexesvc.exe
 
 ### Q5 — We need to know how the attacker installed the service on the compromised machine to understand the attacker's lateral movement tactics. This can help identify other affected systems. Which network share was used by PsExec to install the service on the target machine?
 
 **What I did:** First, to find the network share used, we must know what a network share is. Regarding SMB, network shares are like trees pointing to a part of the machine's live or physical memory. 
+
 **What I found:** In the same last authentication packet, specifically the tree section, I found the network used to access and install PsExec.
+
 **Answer:** ADMIN$ (points to the hard drive where the C:\Windows\ tree is located)
 
 ### Q6 — We must identify the network share used to communicate between the two machines. Which network share did PsExec use for communication?
@@ -58,7 +68,9 @@ Network Forensics
 
 
 **What I did:** The most common network shares in systems are **ADMIN$, IPC$, C$, D$**. I used the timeline of the filtered traffic along with the **info** section.
+
 **What I found:** I found several SMB packets. Furthermore, I tried to understand the chronology of the SMB packets, where the first ones were for SMB communication verification, followed by the packets responsible for authentication. From there, I reached a packet where the attacker tried to establish a logical communication with the victim machine to manage processes in the RAM on the machine.
+
 **Answer:** IPC$
 
 ### Q7 — Now that we have a clearer picture of the attacker's activities on the compromised machine, it's important to identify any further lateral movement. What is the hostname of the second machine the attacker targeted to pivot within our network?
@@ -66,7 +78,9 @@ Network Forensics
 ![pcap](screenshots/8.jpeg)
 
 **What I did:** To find the second pivoting attempt, I filtered the traffic by including the attacker's IP while excluding the IP of the first machine.
+
 **What I found:** I found SMB packets showing an establishment of communication between two machines, one of which was used by the attacker. Consequently, I examined the packets where I found the second machine.
+
 **Answer:** Marketing-PC
 
 ## Activity Timeline
