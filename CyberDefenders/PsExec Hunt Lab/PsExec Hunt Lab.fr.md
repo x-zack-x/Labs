@@ -71,17 +71,29 @@ Network Forensics
 
 ## Activity Timeline
  - t=283,377 |l'attaqueur initialise un connexion tcp par un paquet SYN en utilisant la machine de HR
- - t=283,393 |l'etablissement de la plus grande version commune de smb sans compter la signature numérique et l'algorithme de chiffrement utilisé par smb.
+ 
+ - t=283,393 |l'etablissement de la plus grande version commune de smb sans compter la signature numérique et l'algorithme de chiffrement utilisé par smb
+ 
  - t=283,408 | la demande et la réponse de ntlmssp par les informations d'identifiant pour être intégrées dans la génération du mots de passe 
- - t=283,409 | tentative avec succè d'authentification avec username **ssales**.
+ 
+ - t=283,409 | tentative avec succè d'authentification avec username **ssales**
+ 
  - t=283,411 | l'établissement avec smb2 une communication logique avec la machine ciblé en utilisant l'arbre IPC$
+ 
  - t=283,413 | l'accès à l'arbre ADMIN$ sur le disque dur
+ 
  - t=283,416 | la création du fichier **PSexesvc.exe** sur l'arbre ADMIN$ afin de bénificier des privilèges
+ 
  - t=283,417 | la transmission du code vers le fichier **Psexesvc.exe**
+ 
  - t=283,419 | la demande d'informations concernant le fichier **Psexecsvc.exe**
+ 
  - t=534,442 | la tentative du pivotage vers une nouvelle machine **Marketing-pc** avec user **jdoe** qui est échouée par la suite
- - t=536,505 | deuxième tentative avec succès d'authentification sur la même  machine avec user **IEuser**.
+ 
+ - t=536,505 | deuxième tentative avec succès d'authentification sur la même  machine avec user **IEuser**
+ 
  - t=536,507 | l'accès à l'arbre ADMIN$ dans la machine **Marketing-pc** 
+ 
  - t=536,511 | la création du fichier **psexesvcexe** sur la machine **Marketing-pc**
 
 ## What I Learned
